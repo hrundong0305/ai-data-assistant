@@ -14,6 +14,7 @@
     E:\python\python.exe app.py
 然后浏览器访问 http://127.0.0.1:8000
 """
+import os
 import sys
 import json
 import re
@@ -29,21 +30,22 @@ import requests
 # ================= 配置区（你只需要改这里） =================
 DATA_PATH = "data/ecommerce_sales.csv"
 
-# 本地模型（Ollama，默认）
+# --- 本地模型（Ollama，默认）---
 MODEL_API_BASE = "http://localhost:11434"
 MODEL_API_PATH = "/api/chat"          # Ollama 的对话端点
 MODEL_NAME = "qwen2.5:7b"
 
-# 切换云端大模型示例（改成 DeepSeek / 豆包等任意 OpenAI 兼容接口）：
+# --- 切换云端大模型（DeepSeek 示例，改这三行即可）---
 # MODEL_API_BASE = "https://api.deepseek.com"
 # MODEL_API_PATH = "/chat/completions"     # OpenAI 兼容格式
 # MODEL_NAME = "deepseek-chat"
-# MODEL_API_KEY = "sk-在这里填你的key"      # 没有 key 的平台留空
+# API Key 安全做法：不写死在代码里（否则推到 GitHub/Gitee 会泄露），
+# 优先从环境变量 AI_MODEL_API_KEY 读取；没有则留空（本地模型不需要）。
 
 PORT = 8000
 # ===========================================================
 
-MODEL_API_KEY = ""
+MODEL_API_KEY = os.environ.get("AI_MODEL_API_KEY", "")
 
 app = Flask(__name__)
 
