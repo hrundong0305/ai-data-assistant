@@ -453,15 +453,12 @@ def open_browser():
 
 
 if __name__ == "__main__":
-    # 云平台会通过环境变量 PORT 指定监听端口（本地默认 8000）
-    listen_port = int(os.environ.get("PORT", PORT))
     print("=" * 52)
     print(" 电商经营 AI 问答助手 已启动")
     print(f" 数据: {DATA_PATH}")
     print(f" 模型: {MODEL_NAME} @ {MODEL_API_BASE}")
-    print(f" 打开: http://127.0.0.1:{listen_port}")
+    print(f" 打开: http://127.0.0.1:{PORT}")
     print(" 关闭本窗口即停止服务")
     print("=" * 52)
     threading.Timer(1.0, open_browser).start()
-    # 0.0.0.0 = 允许局域网/云平台访问；本地使用不受影响
-    app.run(host="0.0.0.0", port=listen_port, debug=False)
+    app.run(host="127.0.0.1", port=PORT, debug=False)
