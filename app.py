@@ -11,7 +11,7 @@
     展示层   Flask 网页仪表盘 + 问答框（浏览器打开即可演示）
 
 用法（PowerShell 直接复制，或双击 start.bat）：
-    E:\python\python.exe app.py
+    E:/python/python.exe app.py
 然后浏览器访问 http://127.0.0.1:8000
 """
 import os
