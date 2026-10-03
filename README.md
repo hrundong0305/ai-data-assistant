@@ -10,22 +10,21 @@
 
 ***
 
-## 快速开始（Windows）
+## 快速开始
 
+**环境要求**：Python 3.10+；本地模型模式需要已安装 Ollama 并拉取 `qwen2.5:7b`；云端模式需要 OpenAI 兼容 API Key（见下文"换成云端模型"）。
 
+```bash
+# 1. 安装依赖
+pip install flask pandas requests
 
+# 2. 启动
+python app.py
 ```
-# 1. 进入项目目录（在资源管理器里找到 ai-data-assistant 文件夹也行）
-cd E:\ai-data-assistant
 
-# 2. 启动（两种方式任选）
-start.bat                # 方式一：双击 start.bat
-E:\python\python.exe app.py    # 方式二：命令行
-```
+启动后打开浏览器 `http://127.0.0.1:8000`，就可以向数据提问了。
 
-启动后自动打开浏览器 `http://127.0.0.1:8000`，就可以向数据提问了。
-
-**先决条件**：Ollama 本地模型 qwen2.5:7b 已安装并运行（11434 端口）；如未安装，见项目根目录的 README 上级说明。
+> Windows 本机作者用法：双击 `start.bat` 或运行 `E:\python\python.exe app.py`（作者环境为 E 盘部署）。
 
 
 
@@ -98,10 +97,8 @@ MODEL_API_KEY = "sk-你的key"
 
 **重新生成模拟数据**（可选）：
 
-
-
 ```
-E:\python\python.exe generate_data.py
+python generate_data.py
 ```
 
 
