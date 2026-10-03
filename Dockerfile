@@ -13,7 +13,8 @@ COPY . .
 # 数据文件路径（容器内相对路径）
 ENV DATA_PATH=data/ecommerce_sales.csv
 
-# 云平台会注入 PORT 环境变量；本地默认 8000
-EXPOSE 8000
+# 魔搭 docker 模式端口固定为 7860；云平台会注入 PORT 覆盖此值
+ENV PORT=7860
+EXPOSE 7860
 
 CMD ["python", "app.py"]
