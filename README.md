@@ -10,6 +10,16 @@
 
 ***
 
+## 在线体验（已上线 🎉）
+
+**任何人点开即可体验（无需安装、无需Python）：**
+
+👉 **https://modelscope.cn/studios/hrundong1/ai-data-assistant**
+
+已部署到魔搭创空间（docker 模式 + DeepSeek 云端 API），浏览器打开即用，手机也能访问。
+
+> 部署架构：Flask 应用 docker 化 → 魔搭创空间构建运行 → 密文环境变量注入 `AI_MODEL_API_KEY` → 云端 deepseek-chat 组织运营语言回答。
+
 ## 快速开始
 
 **环境要求**：Python 3.10+；本地模型模式需要已安装 Ollama 并拉取 `qwen2.5:7b`；云端模式需要 OpenAI 兼容 API Key（见下文"换成云端模型"）。
@@ -127,11 +137,17 @@ python generate_data.py
 
 ***
 
-## 在线版（预告）
+## 在线版（已上线 ✅）
 
-本作品当前为**本地部署版**（需要 Python + 本地模型运行，所以不能像静态网页那样用 GitHub Pages 直接点开）。
+本作品已部署到**魔搭创空间**，任何人点开即可体验：
 
-下一步计划：把模型切换为云端 API（如 DeepSeek），部署到免费平台拿到**真·在线链接**——代码一行不改，因为设计上就是"换模型不改架构"。
+👉 **https://modelscope.cn/studios/hrundong1/ai-data-assistant**
+
+- 部署方式：docker 模式（Dockerfile 固定端口 7860）+ 免费 CPU
+- 模型：DeepSeek 云端 API（密文环境变量注入 Key，不写死在代码）
+- 已验证：首页渲染 + 云端问答（"哪个品类卖得最好？"→ 数码4009万TOP1，毛利率34.99%偏低，建议搭售美妆55.14%）✅
+
+**这就是"换模型不改架构"的实证**：本地版代码一行没改，只是 Docker 化 + 配置环境变量，就从本地Qwen切到了云端DeepSeek。
 
 
 
