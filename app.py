@@ -30,22 +30,42 @@ import requests
 # ================= 配置区（你只需要改这里） =================
 DATA_PATH = "data/ecommerce_sales.csv"
 
-# --- 本地模型（Ollama，默认）---
-MODEL_API_BASE = "http://localhost:11434"
-MODEL_API_PATH = "/api/chat"          # Ollama 的对话端点
-MODEL_NAME = "qwen2.5:7b"
+# --- 模型模式：local = 本地Ollama（默认，免费离线） | cloud = 云端API（更强，需Key）---
+# 两种方式切换：
+#   方式A（推荐，代码不改）：PowerShell 运行 setx AI_MODEL_MODE "cloud" 后重开窗口
+#   方式B：直接改下面这行默认值
+MODEL_MODE = os.environ.get("AI_MODEL_MODE", "local").lower()
 
-# --- 切换云端大模型（DeepSeek 示例，改这三行即可）---
-# MODEL_API_BASE = "https://api.deepseek.com"
-# MODEL_API_PATH = "/chat/completions"     # OpenAI 兼容格式
-# MODEL_NAME = "deepseek-chat"
-# API Key 安全做法：不写死在代码里（否则推到 GitHub/Gitee 会泄露），
-# 优先从环境变量 AI_MODEL_API_KEY 读取；没有则留空（本地模型不需要）。
+if MODEL_MODE == "cloud":
+    # --- 云端模式（DeepSeek 示例，其他 OpenAI 兼容平台同理）---
+    MODEL_API_BASE = "https://api.deepseek.com"
+    MODEL_API_PATH = "/chat/completions"     # OpenAI 兼容格式
+    MODEL_NAME = "deepseek-chat"
+else:
+    # --- 本地模式（Ollama）---
+    MODEL_API_BASE = "http://localhost:11434"
+    MODEL_API_PATH = "/api/chat"             # Ollama 的对话端点
+    MODEL_NAME = "qwen2.5:7b"
+
+# API Key 安全做法：不写死在代码里（否则推到 GitHub/Gitee 会泄露）。
+# 双保险读取：先读环境变量，读不到再从 Windows 注册表 User 级读取
+# （setx 写入的位置），避免新开的进程读不到刚设置的变量。
+def _load_api_key():
+    key = os.environ.get("AI_MODEL_API_KEY", "").strip()
+    if not key and os.name == "nt":
+        try:
+            import winreg
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+                key = (winreg.QueryValueEx(k, "AI_MODEL_API_KEY")[0] or "").strip()
+        except Exception:
+            pass
+    return key
+
+
+MODEL_API_KEY = _load_api_key()
 
 PORT = 8000
 # ===========================================================
-
-MODEL_API_KEY = os.environ.get("AI_MODEL_API_KEY", "")
 
 app = Flask(__name__)
 
@@ -208,7 +228,11 @@ def pick_rule_data(rule_key, question):
         return "品类毛利率排行（从高到低）：\n" + "；".join(parts)
     if rule_key == "top_category":
         c = M["by_category"][0]
-        return f"销售额TOP1品类：{c['name']}，销售额{c['amount_wan']}万元，毛利率{c['margin']}%。"
+        all_cat = "；".join(
+            f"{x['name']}({x['amount_wan']}万元,毛利率{x['margin']}%)" for x in M["by_category"]
+        )
+        return (f"销售额TOP1品类：{c['name']}，销售额{c['amount_wan']}万元，毛利率{c['margin']}%。\n"
+                f"全部品类排行：{all_cat}")
     if rule_key == "bottom_category":
         ranked = sorted(M["by_category"], key=lambda x: x["margin"])
         c = ranked[0]
