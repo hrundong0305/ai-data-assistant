@@ -1,12 +1,20 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 set PYTHONIOENCODING=utf-8
 echo ============================================
-echo   ç”µå•†ç»è¥ AI é—®ç­”åŠ©æ‰‹ - å¯åŠ¨å™¨
-echo   å¯åŠ¨åä¼šè‡ªåŠ¨æ‰“å¼€æµè§ˆå™¨
-echo   å…³é—­æœ¬çª—å£å³åœæ­¢æœåŠ¡
+echo   µçÉÌ¾­Óª AI ÎÊ´ğÖúÊÖ - Æô¶¯Æ÷
+echo   Æô¶¯ºó»á×Ô¶¯´ò¿ªä¯ÀÀÆ÷
+echo   ¹Ø±Õ±¾´°¿Ú¼´Í£Ö¹·şÎñ
 echo ============================================
 echo.
+netstat -ano | findstr ":8000 " | findstr "LISTENING" >nul 2>&1
+if errorlevel 1 goto notrun
+echo ¼ì²âµ½·şÎñÒÑÔÚÔËĞĞ£¬Ö±½Ó´ò¿ªä¯ÀÀÆ÷...
+start "" http://127.0.0.1:8000
+pause
+exit /b
+:notrun
+echo ÕıÔÚÆô¶¯·şÎñ£¨Ô¼3Ãëºó×Ô¶¯´ò¿ªä¯ÀÀÆ÷£©...
+echo ¹Ø±Õ±¾´°¿Ú¼´Í£Ö¹·şÎñ
 E:\python\python.exe app.py
 pause
